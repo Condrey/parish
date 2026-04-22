@@ -1,0 +1,103 @@
+import { webName } from "@/lib/utils";
+import { sendMail } from "../../../(email)/nodemailer";
+
+export const sendWelcomeRemarksEmail = async ({
+  email,
+  name,
+}: {
+  email: string;
+  name: string;
+}) => {
+  const organization = webName + " Management System";
+  const senderName = "Ogwang Coundrey James";
+  const senderTitle = "Support team";
+  const subject = "Welcome remarks!";
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Remarks</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #67ae37;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 65ch;
+            word-break: normal;
+          
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+        }
+        .footer a {
+            color: #387112;
+            text-transform: lowercase;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to ${organization}!</h1>
+        </div>
+        <div class="content">
+            <p>Dear ${name},</p>
+            <p>We are thrilled to have you with us! On behalf of the entire team, we would like to extend a warm welcome to you as the newest member of ${organization}.</p>
+            <p>We believe that with your skills and expertise, you'll contribute greatly to our shared vision and goals. We look forward to working with you and achieving great things together.</p>
+            <p>If you have any questions or need assistance, don't hesitate to reach out to our team. We’re here to help!</p>
+            <p>Once again, welcome aboard, and we’re excited to have you with us!</p>
+            <p>Best Regards,</p>
+            <p>${senderName}<br>
+            ${senderTitle}<br>
+            ${organization}</p>
+        </div>
+        <div class="footer">
+            <p>If you need help or have any questions, feel free to <a href="mailto:support@${process.env.NEXT_PUBLIC_BASE_URL}">contact us here</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+  try {
+    await sendMail(email, {
+      subject,
+      html: htmlContent,
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to send verification link.");
+  }
+};

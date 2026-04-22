@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                      String                   @id @default(uuid())
+  name                    String
+  email                   String                   @unique
+  avatarUrl               String?
+  role                    Role                     @default(TOWN_AGENT)
+  createdAt               DateTime                 @default(now())
+  telephone               String?
+  passwordHash            String?
+  isWelcomed              Boolean                  @default(false)
+  isVerified              Boolean                  @default(false)
+  emailVerified           Boolean                  @default(false)
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens     PasswordResetToken[]
+  sessions                Session[]
+  officer                 Officer?
+
+  @@map("users")
+}
+
+model EmailVerificationToken {
+  id      String @id @default(uuid())
+  userId  String
+  expires BigInt
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_verifications")
+}
+
+model PasswordResetToken {
+  id      String @id @default(uuid())
+  userId  String
+  expires BigInt
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  userId         String
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+  lastVerifiedAt DateTime @default(now())
+  secretHash     String   @default(uuid())
+  role           Role     @default(TOWN_AGENT)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Officer {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  districtId String
+  parishId   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  district   District @relation(fields: [districtId], references: [id])
+  parish     Parish?  @relation(fields: [parishId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@map("technical-officers")
+}
+
+model District {
+  id                  String      @id @default(uuid())
+  name                String      @unique
+  voteNumber          Int
+  votePostalAddress   String
+  votePhysicalAddress String
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  subCounties         SubCounty[]
+  officers            Officer[]
+
+  @@map("districts")
+}
+
+model SubCounty {
+  id         String    @id @default(uuid())
+  name       String
+  districtId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  parishes   Parish[]
+  district   District? @relation(fields: [districtId], references: [id])
+
+  @@unique([name, districtId])
+  @@map("sub-county")
+}
+
+model Parish {
+  id          String     @id @default(uuid())
+  name        String
+  subCountyId String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  subCounty   SubCounty? @relation(fields: [subCountyId], references: [id])
+  townAgents  Officer[]
+  villages    Village[]
+
+  @@unique([name, subCountyId])
+  @@map("parishes")
+}
+
+model Village {
+  id          String       @id @default(uuid())
+  name        String
+  parishId    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  saccoGroups SaccoGroup[]
+  parish      Parish?      @relation(fields: [parishId], references: [id])
+
+  @@unique([name, parishId])
+  @@map("villages")
+}
+
+model SaccoGroup {
+  id            String        @id @default(uuid())
+  name          String
+  villageId     String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  beneficiaries Beneficiary[]
+  village       Village?      @relation(fields: [villageId], references: [id])
+
+  @@unique([name, villageId])
+  @@map("sacco-groups")
+}
+
+model Beneficiary {
+  id           String      @id @default(uuid())
+  fullName     String
+  memberId     String
+  nin          String?     @unique
+  contact      String?
+  gender       Gender      @default(MALE)
+  email        String?     @unique
+  status       Status      @default(ACTIVE)
+  subsistence  String?
+  saccoGroupId String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  saccoGroup   SaccoGroup? @relation(fields: [saccoGroupId], references: [id])
+
+  @@map("beneficiaries")
+}
+
+enum Role {
+  TOWN_AGENT
+  TECHNICAL_OFFICER
+  RETURNING_OFFICER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}

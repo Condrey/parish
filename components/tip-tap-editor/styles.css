@@ -1,0 +1,259 @@
+.tiptap p.is-editor-empty:first-child::before {
+  /* color: theme("colors.muted.foreground"); */
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap.ProseMirror {
+  outline: none;
+}
+
+/* Basic editor styles */
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+    list-style-type: disc;
+
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  /* Heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+    margin-top: 1.5rem;
+    text-wrap: pretty;
+    margin-bottom: calc(var(--spacing) * 0.5);
+  }
+
+  i,
+  em {
+    --tw-tracking: var(--tracking-tighter);
+    letter-spacing: var(--tracking-tighter);
+  }
+
+  h1 {
+    font-size: var(--text-2xl) /* 1.5rem = 24px */;
+    line-height: var(
+      --tw-leading,
+      var(--text-2xl--line-height) /* calc(2 / 1.5) ≈ 1.3333 */
+    );
+    --tw-tracking: var(--tracking-tighter) /* -0.05em */;
+    letter-spacing: var(--tracking-tighter) /* -0.05em */;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 1rem;
+  }
+
+  /* Code and preformatted text styles */
+  code {
+    background-color: var(--foreground);
+    border-radius: 0.4rem;
+    color: var(--background);
+    font-size: 0.85rem;
+    padding: 0.25em 0.3em;
+  }
+
+  pre {
+    background: var(--black);
+    border-radius: 0.5rem;
+    color: var(--white);
+    font-family: "JetBrainsMono", monospace;
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+
+    code {
+      background: none;
+      color: inherit;
+      font-size: 0.8rem;
+      padding: 0;
+    }
+  }
+
+  mark {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border-radius: 0.4rem;
+    box-decoration-break: clone;
+    padding: 0.1rem 0.3rem;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--warning);
+    background-color: color-mix(in oklab, var(--warning) 5%, transparent);
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    &::first-letter {
+      font-size: var(--text-2xl) /* 1.5rem = 24px */;
+      line-height: var(
+        --tw-leading,
+        var(--text-2xl--line-height) /* calc(2 / 1.5) ≈ 1.3333 */
+      );
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--secondary);
+    margin: 2rem 0;
+  }
+
+  /* Table-specific styling */
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+
+    td,
+    th {
+      border: 1px solid var(--border);
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 6px 8px;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    tr {
+      &:nth-child(odd) {
+        background-color: color-mix(in oklab, var(--accent) 30%, transparent);
+      }
+
+      &:is(.dark *) {
+        &:nth-child(odd) {
+          background-color: color-mix(in oklab, var(--accent) 20%, transparent);
+        }
+      }
+
+      &:hover {
+        @media (hover: hover) {
+          background-color: color-mix(in oklab, var(--muted) 50%, transparent);
+        }
+      }
+
+      &[data-state="selected"] {
+        background-color: var(--muted);
+      }
+
+      .transition-colors {
+        transition-property:
+          color, background-color, border-color, outline-color,
+          text-decoration-color, fill, stroke, --tw-gradient-from,
+          --tw-gradient-via, --tw-gradient-to;
+        transition-timing-function: var(
+          --tw-ease,
+          var(--default-transition-timing-function)
+            /* cubic-bezier(0.4, 0, 0.2, 1) */
+        );
+        transition-duration: var(
+          --tw-duration,
+          var(--default-transition-duration) /* 150ms */
+        );
+      }
+    }
+
+    th {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: bold;
+      text-align: left;
+    }
+
+     &:is(.dark *) {
+       th {
+      background-color: color-mix(in oklab, var(--primary) 20%, transparent);
+      color: var(--foreground);
+      font-weight: bold;
+      text-align: left;
+    }
+      }
+
+    .selectedCell:after {
+      background: var(--secondary);
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .column-resize-handle {
+      background-color: var(--primary);
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 4px;
+    }
+  }
+
+  .tableWrapper {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+
+  /* Color swatches */
+  .color {
+    white-space: nowrap;
+
+    &::before {
+      background-color: var(--color);
+      border: 1px solid rgba(128, 128, 128, 0.3);
+      border-radius: 2px;
+      content: " ";
+      display: inline-block;
+      height: 1em;
+      margin-bottom: 0.15em;
+      margin-right: 0.1em;
+      vertical-align: middle;
+      width: 1em;
+    }
+  }
+}
