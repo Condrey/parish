@@ -144,6 +144,19 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
+function FormActions({ className, ...props }: React.ComponentProps<"div">) {
+  const { formDescriptionId } = useFormField();
+
+  return (
+    <div
+      data-slot="form-actions"
+      id={formDescriptionId}
+      className={cn("", className)}
+      {...props}
+    />
+  );
+}
+
 function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? "") : props.children;
@@ -166,6 +179,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
 
 export {
   Form,
+  FormActions,
   FormControl,
   FormDescription,
   FormField,
