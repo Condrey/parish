@@ -5,7 +5,7 @@ import * as carbone from "carbone";
 import { formatDate } from "date-fns";
 import * as path from "path";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   console.info("Generating PARISH document...");
   const body = await req.json();
 
