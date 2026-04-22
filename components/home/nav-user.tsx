@@ -3,7 +3,8 @@
 import { ChevronsUpDown, LogOutIcon, SunIcon } from "lucide-react";
 
 import LogoutButton from "@/app/(auth)/(database)/logout/logout-button";
-import { useSession } from "@/app/session-provider";
+import { useSession } from "@/app/(auth)/session-provider";
+import UserAvatar from "@/app/(auth)/user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +23,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import UserAvatar from "@/components/ui/user-avatar";
 import { REDIRECT_TO_URL_SEARCH_PARAMS } from "@/lib/constants";
 import { useTheme } from "next-themes";
 import Link from "next/link";
