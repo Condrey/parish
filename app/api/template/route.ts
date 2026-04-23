@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getParishStatisticalData } from "@/components/project/parish/action";
 import { Role } from "@/lib/generated/prisma/enums";
 import { ParishData } from "@/lib/types";
 import { put } from "@vercel/blob";
@@ -10,11 +12,15 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const parish = body as ParishData;
-  const dateNow = formatDate(new Date(), "PP");
+  const { thisParish, thisSubCounty } = await getParishStatisticalData({
+    parishId: parish.id,
+    subCountyId: parish.subCountyId!,
+  });
+  const dateNow = formatDate(new Date(), "PPP");
   const district = parish.subCounty?.district;
-  const itOfficer = district?.officers.filter(
+  const itOfficer = district?.officers.find(
     (person) => person.user.role === "TECHNICAL_OFFICER",
-  )[0] || {
+  ) || {
     user: {
       id: "1",
       createdAt: new Date(),
@@ -33,29 +39,34 @@ export async function POST(req: Request) {
   const data = {
     ...parish,
     dateNow,
+    thisParish,
+    thisSubCounty,
     district,
     itOfficer: itOfficer.user,
     villages: parish.villages.map((v) => ({
       ...v,
-      saccoGroups: v.saccoGroups.map((s) => ({
-        ...s,
-        activeBeneficiaries: s.beneficiaries
-          .filter((b) => b.status === "ACTIVE")
-          .map((b, index) => ({
+      saccoGroups: v.saccoGroups.map((s) => {
+        const active: any[] = [];
+        const inactive: any[] = [];
+
+        s.beneficiaries.forEach((b, index) => {
+          const formatted = {
             ...b,
             number: index + 1,
             gender: b.gender === "FEMALE" ? "F" : "M",
             createdAt: formatDate(b.createdAt, "PP"),
-          })),
-        inActiveBeneficiaries: s.beneficiaries
-          .filter((b) => b.status === "INACTIVE")
-          .map((b, index) => ({
-            ...b,
-            number: index + 1,
-            gender: b.gender === "FEMALE" ? "F" : "M",
-            createdAt: formatDate(b.createdAt, "PP"),
-          })),
-      })),
+          };
+
+          if (b.status === "ACTIVE") active.push(formatted);
+          else inactive.push(formatted);
+        });
+
+        return {
+          ...s,
+          activeBeneficiaries: active,
+          inActiveBeneficiaries: inactive,
+        };
+      }),
     })),
   };
   const templatePath = path.resolve(
@@ -76,10 +87,10 @@ export async function POST(req: Request) {
       });
     });
 
-    const currentTime = Date.now().toString();
+    const currentTime = Date.now();
     // Give a unique fileName
     const fileName = sanitizeFilename(
-      `${parish.name.toUpperCase()}_PARISH_FY_VERSION_${currentTime}.docx`,
+      `${parish.name.toUpperCase()}_PARISH_BENEFICIARY_LIST_${currentTime}.docx`,
     );
 
     // Upload to Blob storage

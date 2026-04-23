@@ -151,7 +151,7 @@ export default function FieldParish({ form, lockParishField }: Props) {
   );
 }
 
-function CommandItemParish({
+export function CommandItemParish({
   parish,
   isChecked,
 }: {
@@ -175,7 +175,7 @@ function CommandItemParish({
   );
 }
 
-function ChosenParishCommandItem({
+export function ChosenParishCommandItem({
   parish,
 }: {
   parish: ParishEnumData | undefined;
