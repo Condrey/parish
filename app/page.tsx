@@ -13,10 +13,10 @@ export default function Home() {
         <CoinsIcon className="inline size-12 mr-2 fill-secondary/50" />
         PDM BENEFICIARY LIST
       </TypographyH1>
-      <div className="flex flex-col flex-1   justify-center items-center">
+      <div className="flex flex-col flex-1  *:w-full w-full justify-center items-center">
         <LoadingData />
       </div>
-      <h6 className="text-center inline *:inline mb-12">
+      <h6 className="text-center inline *:inline mb-6 text-muted-foreground">
         Made with{" "}
         <HeartIcon className="fill-red-600 inline text-red-600 animate-pulse" />{" "}
         By <Link href={'mailto:coundreyjames@gmail.com'} className="underline hover:text-blue-500">IT Officer, Lira City</Link>

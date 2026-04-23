@@ -85,7 +85,7 @@ export default function PageClient({ parishes: initialData }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submitIt)}
-        className="w-full max-w-md space-y-6"
+        className="w-full max-w-md space-y-8"
       >
         <FormField
           control={form.control}
@@ -99,7 +99,7 @@ export default function PageClient({ parishes: initialData }: Props) {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full justify-between"
+                      className="w-full justify-between "
                     >
                       {field.value ? (
                         <ChosenParishCommandItem
@@ -162,9 +162,9 @@ export default function PageClient({ parishes: initialData }: Props) {
           )}
         />
         <div className="w-full flex justify-end items-center">
-          {" "}
           {parish && (
             <DownloadParishExtractButton
+            type="button"
               parish={parish}
               variant={"destructive"}
               size={"lg"}
