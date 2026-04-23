@@ -19,7 +19,7 @@ export default function Home() {
       <h6 className="text-center inline *:inline mb-6 text-muted-foreground">
         Made with{" "}
         <HeartIcon className="fill-red-600 inline text-red-600 animate-pulse" />{" "}
-        By <Link href={'mailto:coundreyjames@gmail.com'} className="underline hover:text-blue-500">IT Officer, Lira City</Link>
+        By <Link href={'mailto:coundreyjames@gmail.com'} className="underline hover:text-amber-600 text-blue-500">IT Officer, Lira City</Link>
       </h6>
     </div>
   );

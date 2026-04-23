@@ -169,7 +169,7 @@ export function CommandItemParish({
         {isChecked && <CheckIcon className="size-4" />}
       </div>
       <div className="line-clamp-1 text-xs text-muted-foreground">
-        {subCountyName}- {name}({voteNumber})
+        {name}- {subCountyName}({voteNumber})
       </div>
     </div>
   );
@@ -185,7 +185,7 @@ export function ChosenParishCommandItem({
   const { name: subCountyName } = subCounty!;
   return (
     <div>
-      {subCountyName} - {parishName}
+      {parishName} - {subCountyName}
     </div>
   );
 }
