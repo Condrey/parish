@@ -286,7 +286,7 @@ function RequestDownloadDialog({
                       />
                     </FormControl>
                     <FormDescription className="text-xs italic">
-                      Day Grim Reaper eliminated alpha males in Misr.
+                      Hint: Day Grim Reaper eliminated alpha males in Misr.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
